@@ -3,6 +3,7 @@ import { SectionHeader } from '@/app/components/ui/Headers';
 
 export function YearSection() {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const year = 2026;
   
   return (
     <div className="animate-in fade-in duration-500">
@@ -10,20 +11,31 @@ export function YearSection() {
       
       {/* 2026 Calendar Grid (Mini) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12">
-        {months.map((month, idx) => (
+        {months.map((month, idx) => {
+          const firstDay = new Date(year, idx, 1).getDay();
+          const daysInMonth = new Date(year, idx + 1, 0).getDate();
+          const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+          return (
           <div key={month} className="bg-white p-4 rounded-sm shadow-sm border border-stone-100">
             <h3 className="text-center font-serif text-lg mb-2 text-stone-800 border-b border-stone-100 pb-1">{month}</h3>
             {/* Simple dot grid to simulate days */}
             <div className="grid grid-cols-7 gap-1 text-[8px] text-center text-stone-400 font-sans">
               <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-              {Array.from({ length: 31 }).map((_, d) => (
-                <div key={d} className="aspect-square flex items-center justify-center hover:bg-accent-sage/20 rounded-full cursor-default">
-                  {d + 1}
-                </div>
-              ))}
+              {Array.from({ length: totalCells }).map((_, cellIndex) => {
+                const dayNumber = cellIndex - firstDay + 1;
+                if (dayNumber < 1 || dayNumber > daysInMonth) {
+                  return <div key={`empty-${cellIndex}`} className="aspect-square" />;
+                }
+                return (
+                  <div key={dayNumber} className="aspect-square flex items-center justify-center hover:bg-accent-sage/20 rounded-full cursor-default">
+                    {dayNumber}
+                  </div>
+                );
+              })}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Goals Section */}
