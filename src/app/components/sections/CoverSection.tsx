@@ -58,7 +58,7 @@ export function CoverSection({ onEnter }: { onEnter: () => void }) {
 
       {/* Cover Switcher Dots */}
       <div className="absolute bottom-8 flex flex-col items-center gap-2 z-20">
-        <span className="text-[10px] uppercase tracking-[0.3em] opacity-70">Тема обложки</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] opacity-70">Cover theme (click a dot to switch)</span>
         <div className="flex gap-2">
           {COVERS.map((cover, idx) => (
             <button
@@ -69,7 +69,7 @@ export function CoverSection({ onEnter }: { onEnter: () => void }) {
                 activeCover === idx ? "bg-current scale-110" : "bg-transparent hover:bg-current/20"
               )}
               title={cover.name}
-              aria-label={`Тема обложки: ${cover.name}`}
+              aria-label={`Cover theme: ${cover.name}`}
             />
           ))}
         </div>
