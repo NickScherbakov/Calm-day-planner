@@ -1,11 +1,44 @@
+# Calmdayplanner
 
-  # Aesthetic Minimal Digital Planner
+Интерактивный цифровой планер на 2026 год. Приложение позволяет вести годовые, месячные, недельные и дневные планы, а также блоки фокуса, заботы о себе, финансов и заметок. Интерфейс оптимизирован под печать/экспорт в PDF.
 
-  This is a code bundle for Aesthetic Minimal Digital Planner. The original project is available at https://www.figma.com/design/SzbHdkKEVvKJWPWNzTWoxz/Aesthetic-Minimal-Digital-Planner.
+## Основные возможности
 
-  ## Running the code
+- **Yearly Overview** — мини‑календари всех месяцев 2026 года, годовые цели и «колесо жизни».
+- **Monthly Plan** — календарная сетка месяца с корректным соответствием дат и дней недели, выбор месяца из списка, блоки фокуса и трекера привычек.
+- **Weekly Spread** — неделя с автоматическим определением диапазона текущей недели и несколькими вариантами отображения (minimal/grid/list/timeblock).
+- **Daily Log** — дневной план с корректным отображением текущего дня недели и даты.
+- **Focus & ADHD**, **Self Care**, **Finance**, **Notes**, **Style Guide** — специализированные страницы для концентрации, самочувствия, бюджета, заметок и дизайна.
 
-  Run `npm i` to install the dependencies.
+## Как пользоваться
 
-  Run `npm run dev` to start the development server.
-  
+1. На обложке нажмите **Enter** для входа в индекс.
+2. Используйте вкладки сверху (Index/Year/Month/Week/Day и др.) или плитки на странице Index для перехода между разделами.
+3. В разделе **Month** выберите нужный месяц и планируйте дни.
+4. В разделе **Week** используйте переключатель вида (minimal/grid/list/timeblock).
+5. Для печати или экспорта в PDF нажмите кнопку с иконкой загрузки в правом верхнем углу.
+
+## Установка и запуск
+
+```bash
+npm install
+npm run dev
+```
+
+Откройте в браузере адрес, указанный в консоли Vite.
+
+## Сборка
+
+```bash
+npm run build
+```
+
+После сборки содержимое каталога `dist` можно разместить на любом статическом хостинге.
+
+## Технологии
+
+- React + Vite
+- Tailwind CSS
+- Motion (анимации)
+- Radix UI (компоненты)
+- Lucide (иконки)
