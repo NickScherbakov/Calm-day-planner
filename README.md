@@ -1,4 +1,4 @@
-# Calmdayplanner
+# Calm-day-planner
 
 An interactive digital planner for 2026. The app provides yearly, monthly, weekly, and daily planning views, plus focus, self‑care, finance, and notes sections. The interface is optimized for printing/exporting to PDF.
 
