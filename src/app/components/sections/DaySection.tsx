@@ -10,6 +10,7 @@ export function DaySection() {
       weekday: 'long',
       month: 'short',
       day: 'numeric',
+      year: 'numeric',
     }).format(activeDate);
   }, [activeDate]);
   const shiftDay = (delta: number) => {
