@@ -1,44 +1,44 @@
 # Calmdayplanner
 
-Интерактивный цифровой планер на 2026 год. Приложение позволяет вести годовые, месячные, недельные и дневные планы, а также блоки фокуса, заботы о себе, финансов и заметок. Интерфейс оптимизирован под печать/экспорт в PDF.
+An interactive digital planner for 2026. The app provides yearly, monthly, weekly, and daily planning views, plus focus, self‑care, finance, and notes sections. The interface is optimized for printing/exporting to PDF.
 
-## Основные возможности
+## Key Features
 
-- **Yearly Overview** — мини‑календари всех месяцев 2026 года, годовые цели и «колесо жизни».
-- **Monthly Plan** — календарная сетка месяца с корректным соответствием дат и дней недели, выбор месяца из списка, блоки фокуса и трекера привычек.
-- **Weekly Spread** — неделя с автоматическим определением диапазона текущей недели и несколькими вариантами отображения (minimal/grid/list/timeblock).
-- **Daily Log** — дневной план с корректным отображением текущего дня недели и даты.
-- **Focus & ADHD**, **Self Care**, **Finance**, **Notes**, **Style Guide** — специализированные страницы для концентрации, самочувствия, бюджета, заметок и дизайна.
+- **Yearly Overview** — mini calendars for all months of 2026, annual goals, and a “life wheel.”
+- **Monthly Plan** — calendar grid with correct date-to-weekday alignment, month selector, focus and habit tracker blocks.
+- **Weekly Spread** — current week range with multiple layouts (minimal/grid/list/timeblock).
+- **Daily Log** — day plan with the correct current weekday and date.
+- **Focus & ADHD**, **Self Care**, **Finance**, **Notes**, **Style Guide** — dedicated pages for focus, wellness, budgeting, notes, and design.
 
-## Как пользоваться
+## How to Use
 
-1. На обложке нажмите **Enter** для входа в индекс.
-2. Используйте вкладки сверху (Index/Year/Month/Week/Day и др.) или плитки на странице Index для перехода между разделами.
-3. В разделе **Month** выберите нужный месяц и планируйте дни.
-4. В разделе **Week** используйте переключатель вида (minimal/grid/list/timeblock).
-5. Для печати или экспорта в PDF нажмите кнопку с иконкой загрузки в правом верхнем углу.
+1. On the cover, click **Enter** to open the index.
+2. Use the top tabs (Index/Year/Month/Week/Day, etc.) or the Index tiles to navigate.
+3. In **Month**, pick a month and plan your days.
+4. In **Week**, switch layouts (minimal/grid/list/timeblock).
+5. To print or export PDF, click the download icon in the top‑right corner.
 
-## Установка и запуск
+## Installation & Run
 
 ```bash
 npm install
 npm run dev
 ```
 
-Откройте в браузере адрес, указанный в консоли Vite.
+Open the URL shown in the Vite console.
 
-## Сборка
+## Build
 
 ```bash
 npm run build
 ```
 
-После сборки содержимое каталога `dist` можно разместить на любом статическом хостинге.
+After building, deploy the `dist` folder to any static host.
 
-## Технологии
+## Tech Stack
 
 - React + Vite
 - Tailwind CSS
-- Motion (анимации)
-- Radix UI (компоненты)
-- Lucide (иконки)
+- Motion (animations)
+- Radix UI (components)
+- Lucide (icons)
