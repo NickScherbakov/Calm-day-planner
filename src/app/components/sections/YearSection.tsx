@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function YearSection() {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const year = 2026;
+  const [year, setYear] = useState(2026);
   
   return (
     <div className="animate-in fade-in duration-500">
-      <SectionHeader title="Yearly Overview" subtitle="2026" />
+      <SectionHeader 
+        title="Yearly Overview" 
+        subtitle={`${year}`}
+        action={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setYear(year - 1)}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
+              aria-label="Previous year"
+            >
+              <ChevronLeft size={14} />
+              <span>Prev</span>
+            </button>
+            <button
+              onClick={() => setYear(year + 1)}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
+              aria-label="Next year"
+            >
+              <span>Next</span>
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        }
+      />
       
-      {/* 2026 Calendar Grid (Mini) */}
+      {/* Calendar Grid (Mini) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12">
         {months.map((month, idx) => {
           const firstDay = new Date(year, idx, 1).getDay();
