@@ -57,18 +57,22 @@ export function CoverSection({ onEnter }: { onEnter: () => void }) {
       </button>
 
       {/* Cover Switcher Dots */}
-      <div className="absolute bottom-8 flex gap-2 z-20">
-        {COVERS.map((cover, idx) => (
-          <button
-            key={cover.id}
-            onClick={() => setActiveCover(idx)}
-            className={clsx(
-              "w-3 h-3 rounded-full border border-current/50 transition-all",
-              activeCover === idx ? "bg-current scale-110" : "bg-transparent hover:bg-current/20"
-            )}
-            title={cover.name}
-          />
-        ))}
+      <div className="absolute bottom-8 flex flex-col items-center gap-2 z-20">
+        <span className="text-[10px] uppercase tracking-[0.3em] opacity-70">Тема обложки</span>
+        <div className="flex gap-2">
+          {COVERS.map((cover, idx) => (
+            <button
+              key={cover.id}
+              onClick={() => setActiveCover(idx)}
+              className={clsx(
+                "w-3 h-3 rounded-full border border-current/50 transition-all",
+                activeCover === idx ? "bg-current scale-110" : "bg-transparent hover:bg-current/20"
+              )}
+              title={cover.name}
+              aria-label={`Тема обложки: ${cover.name}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
