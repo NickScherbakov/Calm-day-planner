@@ -1,18 +1,51 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
-import { CheckSquare, Clock } from 'lucide-react';
+import { CheckSquare, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 
 export function DaySection() {
   const hours = Array.from({ length: 17 }, (_, i) => i + 6); // 6:00 to 22:00
-  const todayLabel = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date());
+  const [activeDate, setActiveDate] = useState(() => new Date());
+  const todayLabel = useMemo(() => {
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+    }).format(activeDate);
+  }, [activeDate]);
+  const shiftDay = (delta: number) => {
+    setActiveDate((prev) => {
+      const next = new Date(prev);
+      next.setDate(prev.getDate() + delta);
+      return next;
+    });
+  };
 
   return (
     <div className="animate-in fade-in duration-500">
-      <SectionHeader title="Daily Log" subtitle={todayLabel} />
+      <SectionHeader
+        title="Daily Log"
+        subtitle={todayLabel}
+        action={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => shiftDay(-1)}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
+              aria-label="Previous day"
+            >
+              <ChevronLeft size={14} />
+              <span>Prev</span>
+            </button>
+            <button
+              onClick={() => shiftDay(1)}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
+              aria-label="Next day"
+            >
+              <span>Next</span>
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_250px] gap-8">
         
