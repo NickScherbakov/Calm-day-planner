@@ -7,22 +7,30 @@ type WeekVariant = 'minimal' | 'grid' | 'list' | 'timeblock';
 
 export function WeekSection({ onNavigateDay }: { onNavigateDay: () => void }) {
   const [variant, setVariant] = useState<WeekVariant>('minimal');
-  
-  const days = [
-    { name: 'Monday', date: '12' },
-    { name: 'Tuesday', date: '13' },
-    { name: 'Wednesday', date: '14' },
-    { name: 'Thursday', date: '15' },
-    { name: 'Friday', date: '16' },
-    { name: 'Saturday', date: '17' },
-    { name: 'Sunday', date: '18' },
-  ];
+  const today = new Date();
+  const mondayIndex = (today.getDay() + 6) % 7;
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - mondayIndex);
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+  const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+  const dayFormatter = new Intl.DateTimeFormat('en-US', { day: 'numeric' });
+  const rangeFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+  const days = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + i);
+    return {
+      name: weekdayFormatter.format(d),
+      date: dayFormatter.format(d),
+    };
+  });
+  const weekRange = `${rangeFormatter.format(weekStart)} - ${rangeFormatter.format(weekEnd)}`;
 
   return (
     <div className="animate-in fade-in duration-500 min-h-full flex flex-col">
       <SectionHeader 
         title="Weekly Spread" 
-        subtitle="Jan 12 - Jan 18"
+        subtitle={weekRange}
         action={
           <div className="flex gap-2 text-xs">
             {(['minimal', 'grid', 'list', 'timeblock'] as const).map(v => (

@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
-import { clsx } from 'clsx';
 
 export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void }) {
+  const year = 2026;
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const [activeMonth, setActiveMonth] = useState('January');
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const monthIndex = monthNames.indexOf(activeMonth);
+  const firstDay = new Date(year, monthIndex, 1).getDay();
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
   
   return (
     <div className="animate-in fade-in duration-500 h-full flex flex-col">
@@ -17,7 +22,7 @@ export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void })
             onChange={(e) => setActiveMonth(e.target.value)}
             className="bg-transparent border-b border-stone-300 text-sm py-1 px-2 outline-none font-serif text-ink"
           >
-            {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(m => (
+            {monthNames.map(m => (
               <option key={m} value={m}>{m}</option>
             ))}
           </select>
@@ -34,19 +39,30 @@ export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void })
 
         {/* Calendar Grid */}
         <div className="grid grid-cols-7 flex-1 border-l border-divider">
-          {Array.from({ length: 35 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="border-r border-b border-divider min-h-[80px] p-2 relative group hover:bg-stone-50 transition-colors"
-              onClick={onNavigateWeek} // Simulate linking to week view
-            >
-              <span className="text-xs text-stone-400 font-sans absolute top-2 right-2">{i + 1}</span>
-              <textarea 
-                className="w-full h-full bg-transparent resize-none text-xs outline-none pt-4"
-                placeholder=""
-              />
-            </div>
-          ))}
+          {Array.from({ length: totalCells }).map((_, cellIndex) => {
+            const dayNumber = cellIndex - firstDay + 1;
+            const isCurrentMonth = dayNumber >= 1 && dayNumber <= daysInMonth;
+            return (
+              <div 
+                key={cellIndex} 
+                className={
+                  "border-r border-b border-divider min-h-[80px] p-2 relative group transition-colors " +
+                  (isCurrentMonth ? "hover:bg-stone-50" : "bg-transparent")
+                }
+                onClick={isCurrentMonth ? onNavigateWeek : undefined}
+              >
+                {isCurrentMonth && (
+                  <>
+                    <span className="text-xs text-stone-400 font-sans absolute top-2 right-2">{dayNumber}</span>
+                    <textarea 
+                      className="w-full h-full bg-transparent resize-none text-xs outline-none pt-4"
+                      placeholder=""
+                    />
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
