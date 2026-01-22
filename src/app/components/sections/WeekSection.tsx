@@ -1,16 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
 import { clsx } from 'clsx';
 import { Layout } from 'lucide-react';
+import { useDateContext } from '@/app/contexts/DateContext';
+import type { Section } from '@/app/App';
 
 type WeekVariant = 'minimal' | 'grid' | 'list' | 'timeblock';
 
-export function WeekSection({ onNavigateDay }: { onNavigateDay: () => void }) {
+interface WeekSectionProps {
+  onNavigate: (section: Section) => void;
+}
+
+export function WeekSection({ onNavigate }: WeekSectionProps) {
+  const { selectedDate, navigateToDay } = useDateContext();
   const [variant, setVariant] = useState<WeekVariant>('minimal');
-  const today = new Date();
-  const mondayIndex = (today.getDay() + 6) % 7;
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - mondayIndex);
+  
+  const [weekStart, setWeekStart] = useState(() => {
+    const mondayIndex = (selectedDate.getDay() + 6) % 7;
+    const start = new Date(selectedDate);
+    start.setDate(selectedDate.getDate() - mondayIndex);
+    return start;
+  });
+
+  // Update week when selected date changes
+  useEffect(() => {
+    const mondayIndex = (selectedDate.getDay() + 6) % 7;
+    const start = new Date(selectedDate);
+    start.setDate(selectedDate.getDate() - mondayIndex);
+    setWeekStart(start);
+  }, [selectedDate]);
+
+  const handleDayClick = (dayIndex: number) => {
+    const clickedDate = new Date(weekStart);
+    clickedDate.setDate(weekStart.getDate() + dayIndex);
+    navigateToDay(clickedDate.getFullYear(), clickedDate.getMonth(), clickedDate.getDate());
+    onNavigate('day');
+  };
+
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 6);
   const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
@@ -53,10 +79,10 @@ export function WeekSection({ onNavigateDay }: { onNavigateDay: () => void }) {
         {variant === 'minimal' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
              <div className="space-y-4">
-               {days.slice(0, 4).map(d => <DayRow key={d.name} day={d} onClick={onNavigateDay} />)}
+               {days.slice(0, 4).map((d, idx) => <DayRow key={d.name} day={d} onClick={() => handleDayClick(idx)} />)}
              </div>
              <div className="space-y-4">
-               {days.slice(4).map(d => <DayRow key={d.name} day={d} onClick={onNavigateDay} />)}
+               {days.slice(4).map((d, idx) => <DayRow key={d.name} day={d} onClick={() => handleDayClick(idx + 4)} />)}
                <div className="mt-8 p-4 bg-stone-50 border border-stone-100 rounded-sm">
                  <h4 className="font-serif text-ink mb-2">Weekly Review</h4>
                  <textarea className="w-full bg-transparent text-sm resize-none outline-none h-24" placeholder="How did this week go?" />
@@ -67,8 +93,8 @@ export function WeekSection({ onNavigateDay }: { onNavigateDay: () => void }) {
 
         {variant === 'grid' && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-full">
-            {days.map(d => (
-              <div key={d.name} onClick={onNavigateDay} className="aspect-[3/4] border border-stone-200 p-3 hover:shadow-sm transition-shadow cursor-pointer bg-white">
+            {days.map((d, idx) => (
+              <div key={d.name} onClick={() => handleDayClick(idx)} className="aspect-[3/4] border border-stone-200 p-3 hover:shadow-sm transition-shadow cursor-pointer bg-white">
                 <div className="flex justify-between items-baseline mb-2 border-b border-stone-100 pb-1">
                   <span className="font-serif text-lg">{d.name.substring(0,3)}</span>
                   <span className="text-xs text-stone-400">{d.date}</span>
@@ -86,8 +112,8 @@ export function WeekSection({ onNavigateDay }: { onNavigateDay: () => void }) {
         {/* Simplified handlers for other variants */}
         {(variant === 'list' || variant === 'timeblock') && (
             <div className="space-y-2">
-                {days.map(d => (
-                    <div key={d.name} onClick={onNavigateDay} className="border-b border-divider py-4 flex gap-4 cursor-pointer hover:bg-stone-50 px-2 transition-colors">
+                {days.map((d, idx) => (
+                    <div key={d.name} onClick={() => handleDayClick(idx)} className="border-b border-divider py-4 flex gap-4 cursor-pointer hover:bg-stone-50 px-2 transition-colors">
                         <div className="w-24 font-serif text-xl text-stone-400">{d.name}</div>
                         <div className="flex-1">
                             {variant === 'timeblock' ? (

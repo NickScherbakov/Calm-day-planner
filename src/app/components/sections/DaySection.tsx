@@ -1,24 +1,25 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
 import { CheckSquare, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { useDateContext } from '@/app/contexts/DateContext';
 
 export function DaySection() {
+  const { selectedDate, setSelectedDate } = useDateContext();
   const hours = Array.from({ length: 17 }, (_, i) => i + 6); // 6:00 to 22:00
-  const [activeDate, setActiveDate] = useState(() => new Date());
+  
   const todayLabel = useMemo(() => {
     return new Intl.DateTimeFormat('en-US', {
       weekday: 'long',
       month: 'short',
       day: 'numeric',
       year: 'numeric',
-    }).format(activeDate);
-  }, [activeDate]);
+    }).format(selectedDate);
+  }, [selectedDate]);
+  
   const shiftDay = (delta: number) => {
-    setActiveDate((prev) => {
-      const next = new Date(prev);
-      next.setDate(prev.getDate() + delta);
-      return next;
-    });
+    const next = new Date(selectedDate);
+    next.setDate(selectedDate.getDate() + delta);
+    setSelectedDate(next);
   };
 
   return (

@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
+import { useDateContext } from '@/app/contexts/DateContext';
+import type { Section } from '@/app/App';
 
-export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void }) {
-  const year = 2026;
+interface MonthSectionProps {
+  onNavigate: (section: Section) => void;
+}
+
+export function MonthSection({ onNavigate }: MonthSectionProps) {
+  const { selectedDate, navigateToDay } = useDateContext();
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const [activeMonth, setActiveMonth] = useState('January');
+  
+  const [year, setYear] = useState(selectedDate.getFullYear());
+  const [activeMonth, setActiveMonth] = useState(monthNames[selectedDate.getMonth()]);
+  
+  // Sync with selected date
+  useEffect(() => {
+    setYear(selectedDate.getFullYear());
+    setActiveMonth(monthNames[selectedDate.getMonth()]);
+  }, [selectedDate]);
+
+  const handleDayClick = (day: number, month: number, year: number) => {
+    navigateToDay(year, month, day);
+    onNavigate('day');
+  };
+  
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthIndex = monthNames.indexOf(activeMonth);
   const firstDay = new Date(year, monthIndex, 1).getDay();
@@ -47,30 +67,33 @@ export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void })
           {Array.from({ length: totalCells }).map((_, cellIndex) => {
             const dayNumber = cellIndex - firstDay + 1;
             const isCurrentMonth = dayNumber >= 1 && dayNumber <= daysInMonth;
-            let displayDay, displayMonth, displayYear, isPrevMonth, isNextMonth;
+            let displayDay, displayMonth, displayYear, isPrevMonth, isNextMonth, cellMonthIndex;
             if (dayNumber < 1) {
               isPrevMonth = true;
               displayDay = prevMonthDays + dayNumber;
               displayMonth = monthNames[prevMonthIndex];
               displayYear = prevMonthYear;
+              cellMonthIndex = prevMonthIndex;
             } else if (dayNumber > daysInMonth) {
               isNextMonth = true;
               displayDay = dayNumber - daysInMonth;
               displayMonth = monthNames[nextMonthIndex];
               displayYear = nextMonthYear;
+              cellMonthIndex = nextMonthIndex;
             } else {
               displayDay = dayNumber;
               displayMonth = activeMonth;
               displayYear = year;
+              cellMonthIndex = monthIndex;
             }
             return (
               <div 
                 key={cellIndex} 
                 className={
-                  "border-r border-b border-divider min-h-[80px] p-2 relative group transition-colors " +
-                  (isCurrentMonth ? "hover:bg-stone-50" : "bg-stone-50/30")
+                  "border-r border-b border-divider min-h-[80px] p-2 relative group transition-colors cursor-pointer " +
+                  (isCurrentMonth ? "hover:bg-stone-50" : "bg-stone-50/30 hover:bg-stone-100/40")
                 }
-                onClick={isCurrentMonth ? onNavigateWeek : undefined}
+                onClick={() => handleDayClick(displayDay, cellMonthIndex, displayYear)}
               >
                 <span className={
                   "text-xs font-sans absolute top-2 right-2 " +

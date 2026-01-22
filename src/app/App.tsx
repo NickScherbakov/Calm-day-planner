@@ -9,6 +9,9 @@ import {
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+// Context
+import { DateProvider } from '@/app/contexts/DateContext';
+
 // Layout
 import { PlannerLayout } from '@/app/components/layout/PlannerLayout';
 
@@ -62,33 +65,35 @@ export default function App() {
         */}
       </div>
 
-      <PlannerLayout 
-        activeSection={currentSection} 
-        onNavigate={navigateTo}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="h-full w-full"
-          >
-            {currentSection === 'cover' && <CoverSection onEnter={() => navigateTo('index')} />}
-            {currentSection === 'index' && <IndexSection onNavigate={navigateTo} />}
-            {currentSection === 'year' && <YearSection />}
-            {currentSection === 'month' && <MonthSection onNavigateWeek={() => navigateTo('week')} />}
-            {currentSection === 'week' && <WeekSection onNavigateDay={() => navigateTo('day')} />}
-            {currentSection === 'day' && <DaySection />}
-            {currentSection === 'focus' && <FocusSection />}
-            {currentSection === 'selfcare' && <SelfCareSection />}
-            {currentSection === 'finance' && <FinanceSection />}
-            {currentSection === 'notes' && <NotesSection />}
-            {currentSection === 'styleguide' && <StyleGuideSection />}
-          </motion.div>
-        </AnimatePresence>
-      </PlannerLayout>
+      <DateProvider>
+        <PlannerLayout 
+          activeSection={currentSection} 
+          onNavigate={navigateTo}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSection}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="h-full w-full"
+            >
+              {currentSection === 'cover' && <CoverSection onEnter={() => navigateTo('index')} />}
+              {currentSection === 'index' && <IndexSection onNavigate={navigateTo} />}
+              {currentSection === 'year' && <YearSection onNavigate={navigateTo} />}
+              {currentSection === 'month' && <MonthSection onNavigate={navigateTo} />}
+              {currentSection === 'week' && <WeekSection onNavigate={navigateTo} />}
+              {currentSection === 'day' && <DaySection />}
+              {currentSection === 'focus' && <FocusSection />}
+              {currentSection === 'selfcare' && <SelfCareSection />}
+              {currentSection === 'finance' && <FinanceSection />}
+              {currentSection === 'notes' && <NotesSection />}
+              {currentSection === 'styleguide' && <StyleGuideSection />}
+            </motion.div>
+          </AnimatePresence>
+        </PlannerLayout>
+      </DateProvider>
     </div>
   );
 }

@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '@/app/components/ui/Headers';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useDateContext } from '@/app/contexts/DateContext';
+import type { Section } from '@/app/App';
 
-export function YearSection() {
+interface YearSectionProps {
+  onNavigate: (section: Section) => void;
+}
+
+export function YearSection({ onNavigate }: YearSectionProps) {
+  const { selectedDate, navigateToMonth } = useDateContext();
+  const [year, setYear] = useState(selectedDate.getFullYear());
+  
+  // Sync year when selectedDate changes
+  useEffect(() => {
+    setYear(selectedDate.getFullYear());
+  }, [selectedDate]);
+
+  const handleMonthClick = (monthIndex: number) => {
+    navigateToMonth(year, monthIndex);
+    onNavigate('month');
+  };
+  
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const [year, setYear] = useState(2026);
   
   return (
     <div className="animate-in fade-in duration-500">
@@ -40,7 +58,11 @@ export function YearSection() {
           const daysInMonth = new Date(year, idx + 1, 0).getDate();
           const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
           return (
-          <div key={month} className="bg-white p-4 rounded-sm shadow-sm border border-stone-100">
+          <div 
+            key={month} 
+            className="bg-white p-4 rounded-sm shadow-sm border border-stone-100 hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => handleMonthClick(idx)}
+          >
             <h3 className="text-center font-serif text-lg mb-2 text-stone-800 border-b border-stone-100 pb-1">{month}</h3>
             {/* Simple dot grid to simulate days */}
             <div className="grid grid-cols-7 gap-1 text-[8px] text-center text-stone-400 font-sans">
