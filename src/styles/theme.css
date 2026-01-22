@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Montserrat", sans-serif;
+  
+  --color-paper: #FDFBF7;
+  --color-paper-dark: #F5F2EA;
+  --color-ink: #4A4A4A;
+  --color-ink-light: #8C8C8C;
+  --color-accent-sage: #C1CFA0;
+  --color-accent-beige: #E3D5CA;
+  --color-accent-clay: #D5BDAF;
+  --color-divider: #E5E0D8;
+}
+
+@layer base {
+  body {
+    @apply bg-stone-100 text-ink font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @applyQD font-serif text-ink;
+  }
+}
+
+/* Custom scrollbar for planner feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5BDAF;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C1CFA0;
+}
+
+/* Hide scrollbar for clean look in some containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .page-break {
+    page-break-after: always;
+  }
+}
