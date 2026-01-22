@@ -10,11 +10,16 @@ export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void })
   const firstDay = new Date(year, monthIndex, 1).getDay();
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
   const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  const prevMonthDays = new Date(year, monthIndex, 0).getDate();
+  const prevMonthIndex = monthIndex === 0 ? 11 : monthIndex - 1;
+  const prevMonthYear = monthIndex === 0 ? year - 1 : year;
+  const nextMonthIndex = monthIndex === 11 ? 0 : monthIndex + 1;
+  const nextMonthYear = monthIndex === 11 ? year + 1 : year;
   
   return (
     <div className="animate-in fade-in duration-500 h-full flex flex-col">
       <SectionHeader 
-        title={activeMonth} 
+        title={`${activeMonth} ${year}`} 
         subtitle="Monthly Plan" 
         action={
           <select 
@@ -42,23 +47,47 @@ export function MonthSection({ onNavigateWeek }: { onNavigateWeek: () => void })
           {Array.from({ length: totalCells }).map((_, cellIndex) => {
             const dayNumber = cellIndex - firstDay + 1;
             const isCurrentMonth = dayNumber >= 1 && dayNumber <= daysInMonth;
+            let displayDay, displayMonth, displayYear, isPrevMonth, isNextMonth;
+            if (dayNumber < 1) {
+              isPrevMonth = true;
+              displayDay = prevMonthDays + dayNumber;
+              displayMonth = monthNames[prevMonthIndex];
+              displayYear = prevMonthYear;
+            } else if (dayNumber > daysInMonth) {
+              isNextMonth = true;
+              displayDay = dayNumber - daysInMonth;
+              displayMonth = monthNames[nextMonthIndex];
+              displayYear = nextMonthYear;
+            } else {
+              displayDay = dayNumber;
+              displayMonth = activeMonth;
+              displayYear = year;
+            }
             return (
               <div 
                 key={cellIndex} 
                 className={
                   "border-r border-b border-divider min-h-[80px] p-2 relative group transition-colors " +
-                  (isCurrentMonth ? "hover:bg-stone-50" : "bg-transparent")
+                  (isCurrentMonth ? "hover:bg-stone-50" : "bg-stone-50/30")
                 }
                 onClick={isCurrentMonth ? onNavigateWeek : undefined}
               >
+                <span className={
+                  "text-xs font-sans absolute top-2 right-2 " +
+                  (isCurrentMonth ? "text-stone-400" : "text-stone-300")
+                }>
+                  {displayDay}
+                </span>
+                {!isCurrentMonth && (
+                  <span className="text-[9px] font-sans absolute top-2 left-2 text-stone-300 uppercase">
+                    {displayMonth.substring(0, 3)} {displayYear !== year && displayYear}
+                  </span>
+                )}
                 {isCurrentMonth && (
-                  <>
-                    <span className="text-xs text-stone-400 font-sans absolute top-2 right-2">{dayNumber}</span>
-                    <textarea 
-                      className="w-full h-full bg-transparent resize-none text-xs outline-none pt-4"
-                      placeholder=""
-                    />
-                  </>
+                  <textarea 
+                    className="w-full h-full bg-transparent resize-none text-xs outline-none pt-4"
+                    placeholder=""
+                  />
                 )}
               </div>
             );
