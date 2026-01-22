@@ -4,10 +4,15 @@ import { CheckSquare, Clock } from 'lucide-react';
 
 export function DaySection() {
   const hours = Array.from({ length: 17 }, (_, i) => i + 6); // 6:00 to 22:00
+  const todayLabel = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date());
 
   return (
     <div className="animate-in fade-in duration-500">
-      <SectionHeader title="Daily Log" subtitle="Wednesday, Jan 14" />
+      <SectionHeader title="Daily Log" subtitle={todayLabel} />
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_250px] gap-8">
         
