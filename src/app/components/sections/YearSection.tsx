@@ -20,8 +20,8 @@ export function YearSection({ onNavigate }: YearSectionProps) {
   const handleYearChange = (newYear: number) => {
     setYear(newYear);
     // Update selectedDate to keep month and day, but change the year
-    const newDate = new Date(selectedDate);
-    newDate.setFullYear(newYear);
+    // Use constructor to avoid date overflow issues (e.g., Feb 29 in non-leap year)
+    const newDate = new Date(newYear, selectedDate.getMonth(), selectedDate.getDate());
     setSelectedDate(newDate);
   };
 

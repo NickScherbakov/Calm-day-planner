@@ -24,8 +24,8 @@ export function MonthSection({ onNavigate }: MonthSectionProps) {
     setActiveMonth(newMonth);
     // Update selectedDate to reflect the new month
     const monthIndex = monthNames.indexOf(newMonth);
-    const newDate = new Date(selectedDate);
-    newDate.setMonth(monthIndex);
+    // Use constructor to avoid date overflow issues (e.g., Jan 31 → Feb would overflow to Mar)
+    const newDate = new Date(selectedDate.getFullYear(), monthIndex, selectedDate.getDate());
     setSelectedDate(newDate);
   };
 
