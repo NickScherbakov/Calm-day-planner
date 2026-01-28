@@ -9,13 +9,21 @@ interface YearSectionProps {
 }
 
 export function YearSection({ onNavigate }: YearSectionProps) {
-  const { selectedDate, navigateToMonth } = useDateContext();
+  const { selectedDate, setSelectedDate, navigateToMonth } = useDateContext();
   const [year, setYear] = useState(selectedDate.getFullYear());
   
   // Sync year when selectedDate changes
   useEffect(() => {
     setYear(selectedDate.getFullYear());
   }, [selectedDate]);
+
+  const handleYearChange = (newYear: number) => {
+    setYear(newYear);
+    // Update selectedDate to keep month and day, but change the year
+    const newDate = new Date(selectedDate);
+    newDate.setFullYear(newYear);
+    setSelectedDate(newDate);
+  };
 
   const handleMonthClick = (monthIndex: number) => {
     navigateToMonth(year, monthIndex);
@@ -32,7 +40,7 @@ export function YearSection({ onNavigate }: YearSectionProps) {
         action={
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setYear(year - 1)}
+              onClick={() => handleYearChange(year - 1)}
               className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
               aria-label="Previous year"
             >
@@ -40,7 +48,7 @@ export function YearSection({ onNavigate }: YearSectionProps) {
               <span>Prev</span>
             </button>
             <button
-              onClick={() => setYear(year + 1)}
+              onClick={() => handleYearChange(year + 1)}
               className="flex items-center gap-1 px-3 py-1.5 text-xs uppercase tracking-wider border border-divider rounded-full text-ink-light hover:text-ink hover:border-ink/30 transition-colors"
               aria-label="Next year"
             >

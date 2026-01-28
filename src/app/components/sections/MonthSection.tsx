@@ -8,7 +8,7 @@ interface MonthSectionProps {
 }
 
 export function MonthSection({ onNavigate }: MonthSectionProps) {
-  const { selectedDate, navigateToDay } = useDateContext();
+  const { selectedDate, setSelectedDate, navigateToDay } = useDateContext();
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   
   const [year, setYear] = useState(selectedDate.getFullYear());
@@ -19,6 +19,15 @@ export function MonthSection({ onNavigate }: MonthSectionProps) {
     setYear(selectedDate.getFullYear());
     setActiveMonth(monthNames[selectedDate.getMonth()]);
   }, [selectedDate]);
+
+  const handleMonthChange = (newMonth: string) => {
+    setActiveMonth(newMonth);
+    // Update selectedDate to reflect the new month
+    const monthIndex = monthNames.indexOf(newMonth);
+    const newDate = new Date(selectedDate);
+    newDate.setMonth(monthIndex);
+    setSelectedDate(newDate);
+  };
 
   const handleDayClick = (day: number, month: number, year: number) => {
     navigateToDay(year, month, day);
@@ -44,7 +53,7 @@ export function MonthSection({ onNavigate }: MonthSectionProps) {
         action={
           <select 
             value={activeMonth}
-            onChange={(e) => setActiveMonth(e.target.value)}
+            onChange={(e) => handleMonthChange(e.target.value)}
             className="bg-transparent border-b border-stone-300 text-sm py-1 px-2 outline-none font-serif text-ink"
           >
             {monthNames.map(m => (
